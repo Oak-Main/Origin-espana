@@ -23,7 +23,7 @@ const iso = (m) => `PT${String(m).padStart(2, '0')}M`;
 const total = (r) => r.prepMinutes + r.cookMinutes;
 const num = (n) => Math.round(n * 10) / 10;
 
-const CSS = `:root{--ink:#2b2118;--cream:#faf6ef;--paper:#fff;--terra:#a34a2a;--olive:#5c6b3f;--line:#e7ddcd;--soft:#6f6353}*{margin:0;padding:0;box-sizing:border-box}body{font:17px/1.65 Georgia,'Iowan Old Style','Times New Roman',serif;color:var(--ink);background:var(--cream)}a{color:var(--terra);text-decoration:none}a:hover{text-decoration:underline}.wrap{max-width:880px;margin:0 auto;padding:0 20px}header.site{border-bottom:2px solid var(--ink);background:var(--paper)}.site .wrap{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:16px 20px}.brand{font-size:1.4rem;font-weight:700;color:var(--ink)}.brand em{color:var(--terra);font-style:normal}nav.main a{margin-left:20px;font-size:.95rem;color:var(--soft)}nav.main a:hover{color:var(--terra);text-decoration:none}.lang{font-size:.85rem;border:1.5px solid var(--terra);color:var(--terra);border-radius:999px;padding:3px 14px;margin-left:20px;font-family:system-ui}.lang:hover{background:var(--terra);color:#fff;text-decoration:none}.hero{padding:52px 0 36px}.hero h1{font-size:2.2rem;line-height:1.2;max-width:660px}.hero p{margin-top:14px;max-width:580px;color:var(--soft);font-size:1.05rem}.kicker{display:inline-block;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--olive);border:1px solid var(--olive);border-radius:999px;padding:3px 12px;margin-bottom:18px}section{padding:32px 0}.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px}.card{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:20px 20px 16px;transition:box-shadow .15s;display:block;color:var(--ink)}.card:hover{box-shadow:0 4px 18px rgba(43,33,24,.08);text-decoration:none}.card h3{font-size:1.1rem;line-height:1.3}.card .sub{font-size:.85rem;color:var(--soft);margin-top:4px}.card .meta{margin-top:8px;font-size:.8rem;color:var(--soft)}.card .region{color:var(--olive)}h2.section-title{font-size:1.5rem;margin-bottom:20px}.recipe h1{font-size:2rem;line-height:1.25;max-width:700px}.recipe .lede{margin:16px 0 6px;font-size:1.06rem;color:var(--soft);max-width:640px}.facts{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 26px}.fact{font-size:.85rem;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:6px 12px}.cols{display:grid;grid-template-columns:290px 1fr;gap:36px}.cols h2{font-size:1.15rem;margin-bottom:12px}ul.ingredients{list-style:none}.ingredients li{padding:7px 0;border-bottom:1px dashed var(--line);font-size:.98rem}ol.steps{counter-reset:step;list-style:none}.steps li{counter-increment:step;position:relative;padding:0 0 18px 44px}.steps li::before{content:counter(step);position:absolute;left:0;top:1px;width:28px;height:28px;border-radius:50%;background:var(--terra);color:#fff;font-size:.9rem;display:flex;align-items:center;justify-content:center;font-family:system-ui}.steps li::after{content:'';position:absolute;left:13px;top:32px;bottom:2px;width:1px;background:var(--line)}.steps li:last-child::after{display:none}.note{margin-top:26px;padding:14px 18px;background:#f3efe4;border-left:3px solid var(--olive);font-size:.95rem;border-radius:0 8px 8px 0}footer.site{margin-top:60px;border-top:2px solid var(--ink);background:var(--paper);padding:24px 0;font-size:.88rem;color:var(--soft)}footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}@media(max-width:720px){.cols{grid-template-columns:1fr}.hero h1{font-size:1.7rem}}`;
+const CSS = `:root{--ink:#2b2118;--cream:#faf6ef;--paper:#fff;--terra:#a34a2a;--olive:#5c6b3f;--line:#e7ddcd;--soft:#6f6353}*{margin:0;padding:0;box-sizing:border-box}body{font:17px/1.65 Georgia,'Iowan Old Style','Times New Roman',serif;color:var(--ink);background:var(--cream)}a{color:var(--terra);text-decoration:none}a:hover{text-decoration:underline}.wrap{max-width:880px;margin:0 auto;padding:0 20px}header.site{border-bottom:2px solid var(--ink);background:var(--paper)}.site .wrap{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:16px 20px}.brand{font-size:1.4rem;font-weight:700;color:var(--ink)}.brand em{color:var(--terra);font-style:normal}nav.main a{margin-left:20px;font-size:.95rem;color:var(--soft)}nav.main a:hover{color:var(--terra);text-decoration:none}.lang{font-size:.85rem;border:1.5px solid var(--terra);color:var(--terra);border-radius:999px;padding:3px 14px;margin-left:20px;font-family:system-ui}.lang:hover{background:var(--terra);color:#fff;text-decoration:none}.hero{padding:52px 0 36px}.hero h1{font-size:2.2rem;line-height:1.2;max-width:660px}.hero p{margin-top:14px;max-width:580px;color:var(--soft);font-size:1.05rem}.kicker{display:inline-block;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--olive);border:1px solid var(--olive);border-radius:999px;padding:3px 12px;margin-bottom:18px}section{padding:32px 0}.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px}.card{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:20px 20px 16px;transition:box-shadow .15s;display:block;color:var(--ink)}.card:hover{box-shadow:0 4px 18px rgba(43,33,24,.08);text-decoration:none}.card h3{font-size:1.1rem;line-height:1.3}.card .sub{font-size:.85rem;color:var(--soft);margin-top:4px}.card .meta{margin-top:8px;font-size:.8rem;color:var(--soft)}.card .region{color:var(--olive)}h2.section-title{font-size:1.5rem;margin-bottom:20px}.recipe h1{font-size:2rem;line-height:1.25;max-width:700px}.recipe .lede{margin:16px 0 6px;font-size:1.06rem;color:var(--soft);max-width:640px}.facts{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 26px}.fact{font-size:.85rem;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:6px 12px}.cols{display:grid;grid-template-columns:290px 1fr;gap:36px}.cols h2{font-size:1.15rem;margin-bottom:12px}ul.ingredients{list-style:none}.ingredients li{padding:7px 0;border-bottom:1px dashed var(--line);font-size:.98rem}ol.steps{counter-reset:step;list-style:none}.steps li{counter-increment:step;position:relative;padding:0 0 18px 44px}.steps li::before{content:counter(step);position:absolute;left:0;top:1px;width:28px;height:28px;border-radius:50%;background:var(--terra);color:#fff;font-size:.9rem;display:flex;align-items:center;justify-content:center;font-family:system-ui}.steps li::after{content:'';position:absolute;left:13px;top:32px;bottom:2px;width:1px;background:var(--line)}.steps li:last-child::after{display:none}.note{margin-top:26px;padding:14px 18px;background:#f3efe4;border-left:3px solid var(--olive);font-size:.95rem;border-radius:0 8px 8px 0}footer.site{margin-top:60px;border-top:2px solid var(--ink);background:var(--paper);padding:24px 0;font-size:.88rem;color:var(--soft)}footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}.skip-link{position:absolute;left:16px;top:-80px;z-index:10;background:var(--ink);color:var(--cream);padding:8px 14px;border-radius:4px}.skip-link:focus{top:12px}a:focus-visible,.skip-link:focus-visible{outline:3px solid var(--olive);outline-offset:3px}@media(max-width:720px){.cols{grid-template-columns:1fr}.hero h1{font-size:1.7rem}}`;
 
 // Routes: EN default at /, full ES mirror at /es/. Same recipe slugs.
 const routes = { en: { home: '/', list: '/recipes/', recipe: (s) => `/recipes/${s}/`, search: '/search/' }, es: { home: '/es/', list: '/es/recetas/', recipe: (s) => `/es/receta/${s}/`, search: '/es/buscar/' } };
@@ -50,7 +50,8 @@ ${altPath ? `<link rel="alternate" hreflang="${alt[L.lang]}" href="${ORIGIN}${al
 <style>${CSS}</style>
 ${jsonLd.map((n) => `<script type="application/ld+json">${JSON.stringify(n)}</script>`).join('\n')}
 </head>
-<body>`;
+<body>
+<a class="skip-link" href="#main-content">${L.lang === 'es' ? 'Saltar al contenido principal' : 'Skip to main content'}</a>`;
 }
 
 const header = (L, altHref) => `<header class="site"><div class="wrap"><a class="brand" href="${routes[L.lang].home}">Origin <em>España</em></a><span style="display:flex;align-items:baseline"><nav class="main"><a href="${routes[L.lang].list}">${L.recipes}</a></nav><a class="lang" href="${altHref || routes[alt[L.lang]].home}">${L.switch}</a></span></div></header>`;
@@ -78,7 +79,7 @@ function recipePage(L, r) {
     { '@type': 'ListItem', position: 3, name: title, item: `${ORIGIN}${path}` }] };
   return `${head(L, { title: `${title} — ${isEn ? 'Traditional Spanish Recipe' : 'Receta Tradicional'} | Origin España`, desc, path, altPath, jsonLd: [ld, crumbs] })}
 ${header(L, altPath)}
-<main class="wrap recipe">
+<main id="main-content" tabindex="-1" class="wrap recipe">
   <p class="kicker">${esc(r.region)} · ${esc(cat)}</p>
   <h1>${esc(title)}</h1>
   <p class="lede">${esc(sub)}</p>
@@ -99,7 +100,7 @@ function homePage(L) {
   const regions = [...new Set(es.map((r) => r.region))];
   return `${head(L, { title: `Origin España — ${L.lang === 'es' ? 'Cocina Tradicional Española y Catalana' : 'Traditional Spanish Cooking'}`, desc: L.descHome, path: routes[L.lang].home, altPath: routes[alt[L.lang]].home, jsonLd: [{ '@context': 'https://schema.org', '@type': 'WebSite', name: 'Origin España', url: ORIGIN, inLanguage: L.lang }] })}
 ${header(L, routes[alt[L.lang]].home)}
-<main class="wrap">
+<main id="main-content" tabindex="-1" class="wrap">
   <section class="hero"><span class="kicker">${L.kicker}</span><h1>${esc(L.tag)}</h1><p>${esc(L.descHome)}</p></section>
   <section><h2 class="section-title">${L.fundamentals}</h2><div class="cards">${es.map((r) => card(L, r)).join('')}</div></section>
   <section id="regions"><h2 class="section-title">${L.byRegion}</h2><p>${regions.map((rg) => `<a href="${routes[L.lang].list}">${esc(rg)}</a>`).join(' · ')}</p></section>
@@ -111,7 +112,7 @@ ${footer(L)}
 function listPage(L) {
   return `${head(L, { title: `${L.all} | Origin España`, desc: L.descList, path: routes[L.lang].list, altPath: routes[alt[L.lang]].list })}
 ${header(L, routes[alt[L.lang]].list)}
-<main class="wrap"><section><h1 style="font-size:1.85rem;margin:30px 0 6px">${L.all}</h1>
+<main id="main-content" tabindex="-1" class="wrap"><section><h1 style="font-size:1.85rem;margin:30px 0 6px">${L.all}</h1>
 <p class="lede" style="margin-bottom:24px">${L.count(es.length, [...new Set(es.map((r) => r.region))].length)}</p>
 <div class="cards" style="padding-bottom:50px">${es.map((r) => card(L, r)).join('')}</div></section></main>
 ${footer(L)}
@@ -121,13 +122,13 @@ ${footer(L)}
 function searchPage(L) {
   return `${head(L, { title: `${L.search} | Origin España`, desc: L.descSearch, path: routes[L.lang].search, altPath: routes[alt[L.lang]].search })}
 ${header(L, routes[alt[L.lang]].search)}
-<main class="wrap"><section style="padding:50px 0"><h1>${L.search}</h1>
+<main id="main-content" tabindex="-1" class="wrap"><section style="padding:50px 0"><h1>${L.search}</h1>
 <p class="lede" style="margin:14px 0 20px">${L.searchBody}</p>
 <p><a class="fact" href="${routes[L.lang].list}" style="display:inline-block">${L.goIndex}</a></p></section></main>${footer(L)}</body></html>`;
 }
 
 const notFound = `${head(T.en, { title: `Page not found | Origin España`, desc: 'Page not found.', path: '/404.html' })}
-${header(T.en, routes.es.home)}<main class="wrap"><section style="padding:60px 0"><h1>${T.en.nf}</h1>
+${header(T.en, routes.es.home)}<main id="main-content" tabindex="-1" class="wrap"><section style="padding:60px 0"><h1>${T.en.nf}</h1>
 <p class="lede" style="margin:14px 0 20px">${T.en.nfBody}</p></section></main>${footer(T.en)}</body></html>`;
 
 const IN_KEY = "d390aee0a606d453b3585684871efd3e"; // fleet IndexNow key (vault: INDEXNOW_KEY)
