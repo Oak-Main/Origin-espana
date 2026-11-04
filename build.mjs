@@ -79,7 +79,7 @@ function recipePage(L, r) {
     { '@type': 'ListItem', position: 3, name: title, item: `${ORIGIN}${path}` }] };
   return `${head(L, { title: `${title} — ${isEn ? 'Traditional Spanish Recipe' : 'Receta Tradicional'} | Origin España`, desc, path, altPath, jsonLd: [ld, crumbs] })}
 ${header(L, altPath)}
-<main id="main-content" class="wrap recipe">
+<main id="main-content" tabindex="-1" class="wrap recipe">
   <p class="kicker">${esc(r.region)} · ${esc(cat)}</p>
   <h1>${esc(title)}</h1>
   <p class="lede">${esc(sub)}</p>
@@ -100,7 +100,7 @@ function homePage(L) {
   const regions = [...new Set(es.map((r) => r.region))];
   return `${head(L, { title: `Origin España — ${L.lang === 'es' ? 'Cocina Tradicional Española y Catalana' : 'Traditional Spanish Cooking'}`, desc: L.descHome, path: routes[L.lang].home, altPath: routes[alt[L.lang]].home, jsonLd: [{ '@context': 'https://schema.org', '@type': 'WebSite', name: 'Origin España', url: ORIGIN, inLanguage: L.lang }] })}
 ${header(L, routes[alt[L.lang]].home)}
-<main id="main-content" class="wrap">
+<main id="main-content" tabindex="-1" class="wrap">
   <section class="hero"><span class="kicker">${L.kicker}</span><h1>${esc(L.tag)}</h1><p>${esc(L.descHome)}</p></section>
   <section><h2 class="section-title">${L.fundamentals}</h2><div class="cards">${es.map((r) => card(L, r)).join('')}</div></section>
   <section id="regions"><h2 class="section-title">${L.byRegion}</h2><p>${regions.map((rg) => `<a href="${routes[L.lang].list}">${esc(rg)}</a>`).join(' · ')}</p></section>
@@ -112,7 +112,7 @@ ${footer(L)}
 function listPage(L) {
   return `${head(L, { title: `${L.all} | Origin España`, desc: L.descList, path: routes[L.lang].list, altPath: routes[alt[L.lang]].list })}
 ${header(L, routes[alt[L.lang]].list)}
-<main id="main-content" class="wrap"><section><h1 style="font-size:1.85rem;margin:30px 0 6px">${L.all}</h1>
+<main id="main-content" tabindex="-1" class="wrap"><section><h1 style="font-size:1.85rem;margin:30px 0 6px">${L.all}</h1>
 <p class="lede" style="margin-bottom:24px">${L.count(es.length, [...new Set(es.map((r) => r.region))].length)}</p>
 <div class="cards" style="padding-bottom:50px">${es.map((r) => card(L, r)).join('')}</div></section></main>
 ${footer(L)}
@@ -122,13 +122,13 @@ ${footer(L)}
 function searchPage(L) {
   return `${head(L, { title: `${L.search} | Origin España`, desc: L.descSearch, path: routes[L.lang].search, altPath: routes[alt[L.lang]].search })}
 ${header(L, routes[alt[L.lang]].search)}
-<main id="main-content" class="wrap"><section style="padding:50px 0"><h1>${L.search}</h1>
+<main id="main-content" tabindex="-1" class="wrap"><section style="padding:50px 0"><h1>${L.search}</h1>
 <p class="lede" style="margin:14px 0 20px">${L.searchBody}</p>
 <p><a class="fact" href="${routes[L.lang].list}" style="display:inline-block">${L.goIndex}</a></p></section></main>${footer(L)}</body></html>`;
 }
 
 const notFound = `${head(T.en, { title: `Page not found | Origin España`, desc: 'Page not found.', path: '/404.html' })}
-${header(T.en, routes.es.home)}<main id="main-content" class="wrap"><section style="padding:60px 0"><h1>${T.en.nf}</h1>
+${header(T.en, routes.es.home)}<main id="main-content" tabindex="-1" class="wrap"><section style="padding:60px 0"><h1>${T.en.nf}</h1>
 <p class="lede" style="margin:14px 0 20px">${T.en.nfBody}</p></section></main>${footer(T.en)}</body></html>`;
 
 const IN_KEY = "d390aee0a606d453b3585684871efd3e"; // fleet IndexNow key (vault: INDEXNOW_KEY)
