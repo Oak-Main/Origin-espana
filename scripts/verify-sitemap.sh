@@ -1,43 +1,91 @@
 #!/usr/bin/env bash
 set -euo pipefail
 cd "$(dirname "$0")/.."
-node build.mjs
-if command -v python3 >/dev/null 2>&1; then PYTHON=python3; else PYTHON=python; fi
-"$PYTHON" - <<'PY'
+if command -v python3 >/dev/null 2>&1 && python3 -c 'import sys; sys.exit(0 if sys.version_info >= (3, 7) else 1)'; then
+  SITE_VERIFY_PYTHON=python3
+elif command -v python >/dev/null 2>&1 && python -c 'import sys; sys.exit(0 if sys.version_info >= (3, 7) else 1)'; then
+  SITE_VERIFY_PYTHON=python
+else
+  echo 'verify-sitemap.sh requires Python 3.7+' >&2
+  exit 1
+fi
+"$SITE_VERIFY_PYTHON" - <<'PY'
+from datetime import date
+from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
+import re
+import shutil
+import subprocess
+import tempfile
 import xml.etree.ElementTree as ET
 
+def require(condition, message):
+    if not condition:
+        raise SystemExit(message)
+
+class Page(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.canonicals = []
+        self.noindex = False
+    def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+        if tag == 'link' and 'canonical' in attrs.get('rel', '').lower().split():
+            self.canonicals.append(attrs.get('href'))
+        if tag == 'meta' and attrs.get('name', '').lower() in {'robots', 'googlebot'}:
+            self.noindex |= 'noindex' in re.split(r'[,\s]+', attrs.get('content', '').lower())
+
 out = Path('dist')
+ns = '{http://www.sitemaps.org/schemas/sitemap/0.9}'
 root = ET.parse(out / 'sitemap.xml').getroot()
-assert root.tag == '{http://www.sitemaps.org/schemas/sitemap/0.9}urlset', root.tag
+require(root.tag == ns + 'urlset', 'invalid sitemap root')
 locs = []
 for entry in root:
-    values = {child.tag.rsplit('}', 1)[-1]: (child.text or '').strip() for child in entry}
-    assert entry.tag.endswith('url'), entry.tag
-    assert values.get('loc'), 'missing <loc>'
-    assert values.get('lastmod'), f"missing <lastmod>: {values.get('loc')}"
-    locs.append(values['loc'])
-assert len(locs) == len(set(locs)), 'duplicate URLs in sitemap'
+    require(entry.tag == ns + 'url', 'invalid sitemap entry element')
+    loc_nodes = entry.findall(ns + 'loc')
+    date_nodes = entry.findall(ns + 'lastmod')
+    require(len(loc_nodes) == len(date_nodes) == 1, 'each URL requires one loc and lastmod')
+    loc = (loc_nodes[0].text or '').strip()
+    lastmod = (date_nodes[0].text or '').strip()
+    require(re.fullmatch(r'\d{4}-\d{2}-\d{2}', lastmod), 'lastmod must use YYYY-MM-DD: ' + loc)
+    try:
+        date.fromisoformat(lastmod)
+    except ValueError:
+        raise SystemExit('invalid calendar date: ' + lastmod)
+    locs.append(loc)
+require(len(locs) == len(set(locs)) == 26, 'expected 26 distinct sitemap URLs')
 
 pages = {}
 for html_path in out.rglob('index.html'):
-    route = '/' if html_path.parent == out else '/' + html_path.parent.relative_to(out).as_posix().strip('/') + '/'
-    html = html_path.read_text(encoding='utf-8')
-    assert 'name="robots" content="noindex' not in html, route
-    pages[route] = html
+    route = '/' if html_path.parent == out else '/' + html_path.parent.relative_to(out).as_posix() + '/'
+    page = Page()
+    page.feed(html_path.read_text(encoding='utf-8'))
+    require(not page.noindex, 'unexpected noindex page: ' + route)
+    pages[route] = page
+require(len(pages) == 26, 'expected 26 indexable generated pages')
 
-seen_routes = []
+seen = set()
 for loc in locs:
     parsed = urlsplit(loc)
-    assert parsed.scheme == 'https' and parsed.netloc == 'originespana.com', loc
-    assert not parsed.query and not parsed.fragment, loc
+    require(parsed.scheme == 'https' and parsed.netloc == 'originespana.com', 'wrong origin: ' + loc)
+    require(not parsed.query and not parsed.fragment, 'noncanonical query or fragment: ' + loc)
     route = unquote(parsed.path)
-    assert route in pages, f'URL has no generated route: {loc}'
-    assert f'<link rel="canonical" href="{loc}">' in pages[route], f'canonical/route mismatch: {loc}'
-    seen_routes.append(route)
-assert len(seen_routes) == len(set(seen_routes)), 'duplicate route after normalization'
-assert set(seen_routes) == set(pages), f'route mismatch: missing={sorted(set(pages)-set(seen_routes))}'
-assert len(locs) == len(pages), 'sitemap count does not match real page count'
-print(f'PASS: {len(locs)} unique URLs; all {len(pages)} generated pages matched by route and canonical; XML and lastmod valid; no production requests')
+    require(route in pages and route not in seen, 'missing or duplicate route: ' + loc)
+    require(pages[route].canonicals == [loc], 'canonical mismatch: ' + loc)
+    seen.add(route)
+require(seen == set(pages), 'sitemap/page route mismatch')
+
+# Validate the artifact that ships, then compare a separate clean rebuild.
+# No source or committed output is overwritten by this verifier.
+with tempfile.TemporaryDirectory(prefix='origin-sitemap-') as temporary:
+    temp = Path(temporary)
+    for name in ['build.mjs', 'recipes.json', 'recipes.en.json']:
+        shutil.copyfile(name, temp / name)
+    subprocess.run(['node', 'build.mjs'], cwd=str(temp), check=True)
+    rebuilt = temp / 'dist'
+    original_files = {p.relative_to(out).as_posix(): p.read_bytes() for p in out.rglob('*') if p.is_file()}
+    rebuilt_files = {p.relative_to(rebuilt).as_posix(): p.read_bytes() for p in rebuilt.rglob('*') if p.is_file()}
+    require(original_files == rebuilt_files, 'dist differs from a clean rebuild; rebuild and commit reviewed output')
+print('PASS: 26 canonical routes, valid calendar dates, exact generated bytes; no production requests or output mutation')
 PY
