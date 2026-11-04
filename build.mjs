@@ -10,7 +10,13 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ORIGIN = 'https://originespana.com';
-const TODAY = new Date().toISOString().slice(0, 10);
+// Pin the publication date so unchanged sources rebuild byte-for-byte on later days.
+// Advance this default with a material source release; BUILD_DATE supports reviewed snapshots.
+const TODAY = process.env.BUILD_DATE ?? '2026-11-04';
+const buildDate = new Date(`${TODAY}T00:00:00Z`);
+if (!/^\d{4}-\d{2}-\d{2}$/.test(TODAY) || !Number.isFinite(buildDate.getTime()) || buildDate.toISOString().slice(0, 10) !== TODAY) {
+  throw new Error('BUILD_DATE must be a valid YYYY-MM-DD calendar date');
+}
 const es = JSON.parse(readFileSync(new URL('./recipes.json', import.meta.url), 'utf8'));
 const en = JSON.parse(readFileSync(new URL('./recipes.en.json', import.meta.url), 'utf8'));
 for (const r of es) r.en = en[r.slug];

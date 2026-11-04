@@ -11,6 +11,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Verify committed sitemap without overwriting it
+        run: bash scripts/verify-sitemap.sh
+      - name: Exercise sitemap verifier failures
+        run: python3 scripts/test-verify-sitemap.py
       - name: Build
         run: node build.mjs
       - name: Verify output contract
