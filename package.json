@@ -4,6 +4,6 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "build": "node build.mjs"
+    "build": "node scripts/legal-build.mjs --check-only && node build.mjs && node scripts/legal-build.mjs --out dist"
   }
 }
