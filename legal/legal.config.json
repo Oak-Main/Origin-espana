@@ -1,0 +1,18 @@
+{
+  "site_name": "Origin España",
+  "site_url": "https://originespana.com",
+  "legal_entity": "{{LEGAL_ENTITY}}",
+  "postal_address": "{{POSTAL_ADDRESS}}",
+  "contact_email": "{{CONTACT_EMAIL}}",
+  "governing_law": "California",
+  "effective_date": "{{EFFECTIVE_DATE}}",
+  "analytics": [
+    "Cloudflare Web Analytics (Cloudflare, Inc.)"
+  ],
+  "amazon": false,
+  "pages": [
+    "privacy",
+    "terms"
+  ],
+  "disclosure_url": "/affiliate-disclosure/"
+}
