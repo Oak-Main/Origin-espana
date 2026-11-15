@@ -30,11 +30,26 @@ if (unresolved.length) {
 console.log('legal-build: all legal tokens resolved')
 if (checkOnly || !out) process.exit(0)
 
+const affiliate = cfg.affiliate_links !== false
+const VARIANT = {
+  affiliate: {
+    privacy: '<h2>Affiliate links</h2>\n<p>Some pages contain affiliate links. If you click one, the retailer or affiliate network may set its own cookie to record that the visit came from us. Their handling of that data is governed by their own privacy policies.</p>',
+    terms: '<h2>Information only</h2>\n<p>Content on this site is provided for general information. It is not professional advice. Prices, availability and product details change, and you should confirm them with the seller before you buy.</p>\n<h2>Affiliate links and third-party sites</h2>\n<p>Some links take you to other websites, and some are affiliate links. We are not responsible for the content, products or practices of other websites.</p>',
+  },
+  none: {
+    privacy: '<h2>Affiliate links</h2>\n<p>This site carries no affiliate links. If that changes, this policy will say so before any such link appears.</p>',
+    terms: '<h2>Information only</h2>\n<p>Content on this site is provided for general information. It is not professional advice.</p>\n<h2>Third-party sites</h2>\n<p>Some links take you to other websites. We are not responsible for the content, products or practices of other websites.</p>',
+  },
+}
 const fill = (s) => s
   .replace(/\{\{([A-Z_]+)\}\}/g, (_, k) => {
     const key = k.toLowerCase()
     if (key === 'analytics_list') return (cfg.analytics || []).map((a) => `<li>${a}</li>`).join('') || '<li>None</li>'
     if (key === 'amazon_sentence') return cfg.amazon ? '<p>As an Amazon Associate I earn from qualifying purchases.</p>' : ''
+    // Legal kit v2: the affiliate or the no-affiliate variant, chosen by what the
+    // site carries. affiliate_links defaults to true so older configs render as before.
+    if (key === 'privacy_affiliate_section') return VARIANT[affiliate ? 'affiliate' : 'none'].privacy
+    if (key === 'terms_info_and_links') return VARIANT[affiliate ? 'affiliate' : 'none'].terms
     const v = cfg[key]
     if (v === undefined) throw new Error(`legal-build: template token {{${k}}} has no config value`)
     return String(v)
