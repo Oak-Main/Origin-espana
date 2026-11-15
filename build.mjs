@@ -61,7 +61,7 @@ ${jsonLd.map((n) => `<script type="application/ld+json">${JSON.stringify(n)}</sc
 }
 
 const header = (L, altHref) => `<header class="site"><div class="wrap"><a class="brand" href="${routes[L.lang].home}">Origin <em>España</em></a><span style="display:flex;align-items:baseline"><nav class="main"><a href="${routes[L.lang].list}">${L.recipes}</a></nav><a class="lang" href="${altHref || routes[alt[L.lang]].home}">${L.switch}</a></span></div></header>`;
-const footer = (L) => `<footer class="site"><div class="wrap"><span>© ${TODAY.slice(0, 4)} Origin España</span><span>${L.lang === 'es' ? 'Recetas de la abuela, cocinadas sin prisa' : 'Grandma\'s recipes, cooked without hurry'} · <a href="${routes[alt[L.lang]].home}">${L.switch}</a> · <a href="/privacy/">${L.lang === 'es' ? 'Privacidad' : 'Privacy'}</a> · <a href="/terms/">${L.lang === 'es' ? 'Términos' : 'Terms'}</a></span></div></footer>`;
+const footer = (L) => `<footer class="site"><div class="wrap"><span>© ${TODAY.slice(0, 4)} Origin España</span><span>${L.lang === 'es' ? 'Recetas de la abuela, cocinadas sin prisa' : 'Grandma\'s recipes, cooked without hurry'} · <a href="${routes[alt[L.lang]].home}">${L.switch}</a> · <a href="/privacy/" hreflang="en">Privacy</a> · <a href="/terms/" hreflang="en">Terms</a></span></div></footer>`;
 
 function recipePage(L, r) {
   const isEn = L.lang === 'en';
